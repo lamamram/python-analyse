@@ -93,3 +93,10 @@ class Truc:
 t = Truc()
 t.transfo1().transfo2()
 # %%
+class Truc:
+    def __str__(self) -> str:
+        return "machin"
+    pass
+t = Truc()
+print(t)
+# %%
