@@ -40,3 +40,8 @@ x, y = func()
 # formatage
 f"1/3 à deux chiffres sign: {1/3:.2f}"
 # %%
+# valeur à l'indice, indice d'une valeur
+lst = [1, 2, 3]
+lst[0]
+lst.index(1)
+# %%

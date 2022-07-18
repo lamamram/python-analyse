@@ -30,6 +30,7 @@ values[ values > 5 ]
 # exercice de filtres numpy:
 # à partir de deux tableaux numpy d'entiers générés aléatoirement
 # donner le tableau des éléments non communs aux deux tableaux
+from numpy.ma import masked_array
 
 arr1, arr2 = [ rng.integers(1, 100, endpoint=True, size=20, dtype=np.int8) for _ in range(2) ]
 print(f"arr1 = {arr1}")
@@ -39,5 +40,33 @@ print(f"arr2 = {arr2}")
 
 union = np.union1d(arr1, arr2)
 inter = np.intersect1d(arr1, arr2)
-union[ ~np.isin(union, inter) ]
+cond = ~np.isin(union, inter)
+
+# valeurs
+print(union[ cond ])
+
+# idem avec masked_array
+masked= masked_array(union, mask=np.isin(union, inter))
+print(masked)
+print(masked[masked.mask == False])
+
+# indices des True
+np.where(cond)
+# tableau masqué
+# %%
+# données manquantes
+
+data = np.array([1., 4.32, 3.14, 4, "N/A", "INF", None])
+print(data.dtype)
+# substitutions
+data[ data == "N/A"] = np.nan
+data[ data == "INF"] = np.inf
+
+data = data.astype(float)
+# nan et inf sont englobants
+data.mean()
+clean_inf = data[~np.isinf(data)]
+clean_nan = clean_inf[~np.isnan(clean_inf)]
+# isnan inclue None : pas de np.isnull()
+clean_nan.mean()
 # %%
