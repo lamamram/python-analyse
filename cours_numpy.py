@@ -77,7 +77,25 @@ coeffs = rng.integers(1, 3, endpoint=True, size=20, dtype=np.int8)
 print(sum(map(lambda n, c: n*c, notes, coeffs))/coeffs.sum())
 np.average(notes, weights=coeffs)
 # %%
+from scipy import stats
+
 stock = [1000, 1328, 1145, 866, 953]
 # 1. trouver le tableau des coeffs multiplicateurs permettants de passer
 # de stock[n] à stock[n + 1], arrondi à 2 chiffres sign
 # hint: np.diff, np.around
+rates = np.around(np.diff(stock) / stock[:-1] + 1, 2)
+
+# taux moyen arithmétique: non signifiant
+rates.mean() - 1
+
+# taux moyen réel =>géométrique
+stats.gmean(rates) - 1
+
+
+# 100 km à 40, 100km à 60
+# 150 mn + 100 mn = 4h 10 pour 200km
+v = 200 / 250 * 60
+v = stats.hmean(np.array([40, 60]))
+# 2/(1/40 + 1/60)
+v
+# %%
