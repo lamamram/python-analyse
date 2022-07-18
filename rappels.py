@@ -136,3 +136,15 @@ cuisson_oeuf_coque = timedelta(minutes=3)
 datetime.now() + cuisson_oeuf_coque
 
 # %%
+
+# équivalences entre liste de tuples et dictionnaire
+
+keys = ["k1", "k2"]
+values = ["v1", "v2"]
+
+list(zip(keys, values))
+d = dict(zip(keys, values))
+
+for k, v in d.items():
+    print(k, v)
+# %%
