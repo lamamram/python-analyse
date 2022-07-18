@@ -73,3 +73,11 @@ clean_nan.mean()
 notes = rng.integers(0, 20, endpoint=True, size=20, dtype=np.int8)
 coeffs = rng.integers(1, 3, endpoint=True, size=20, dtype=np.int8)
 
+# moyenne pondérée
+print(sum(map(lambda n, c: n*c, notes, coeffs))/coeffs.sum())
+np.average(notes, weights=coeffs)
+# %%
+stock = [1000, 1328, 1145, 866, 953]
+# 1. trouver le tableau des coeffs multiplicateurs permettants de passer
+# de stock[n] à stock[n + 1]
+# hint: np.diff
