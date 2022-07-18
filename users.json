@@ -1,0 +1,12 @@
+{
+    "schema":{
+        "fields":[
+            {"name":"index","type":"string"},
+            {"name":"name","type":"string"},
+            {"name":"age","type":"integer"},
+            {"name":"address","type":"string"},
+            {"name":"size","type":"number"}],
+            "primaryKey":["index"],"pandas_version":"1.4.0"},
+        "data":[
+            {"index":"user1","name":"jimmy","age":28,"address":"2 rue de la r\u00e9p, 44000 NANTES","size":1.73},
+            {"index":"user2","name":"Joan","age":33,"address":"12 bd Haussmann 75009 Paris","size":1.56},{"index":"user3","name":"Paul","age":76,"address":"10, chemin des lilas, 13002 MaRSEILLE","size":1.85}]}

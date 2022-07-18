@@ -48,3 +48,25 @@ records = np.apply_along_axis(
 df = pd.DataFrame.from_records(records, index=index)
 df
 # %%
+
+# écriture dans un csv
+df.to_csv(
+    "users.csv",
+    sep=";",
+    encoding="utf8",
+    index=True 
+)
+# %%
+df = pd.read_csv(
+    "users.csv",
+    delimiter=";",
+    index_col=0
+)
+df
+# %%
+df.to_json("users.json",
+            # orient="records"
+            # orient="index"
+            orient="table"
+)
+# %%
