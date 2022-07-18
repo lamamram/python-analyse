@@ -54,9 +54,17 @@ other_patients = np.genfromtxt(
     comments="//",
     missing_values="???",
     filling_values=0.,
-    usecols=(0,1,3,4),
-    dtype="f8,f8,i4,i4,U3"
+    usecols=(0,1,2,3),
+    # dtype="f8,f8,i4,i4,U3"
+    dtype="f8"
 )
 other_patients.ndim
-other_patients["f0"].mean()
+# other_patients["f0"].mean()
+# %%
+# %%
+# ajouts des nouvelles lignes en bas
+np.concatenate([patients, other_patients], axis=0)
+
+# ajout des nouvelles lignes à droite
+# np.concatenate([patients, other_patients], axis=1)
 # %%
