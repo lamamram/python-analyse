@@ -68,3 +68,8 @@ np.concatenate([patients, other_patients], axis=0)
 # ajout des nouvelles lignes à droite
 # np.concatenate([patients, other_patients], axis=1)
 # %%
+# idem avec append (on ajoute des colonnes à droite, d'où le reshape)
+patients
+np.append(patients, axis=0, values=[[1, 2, 3, 4]])
+np.append(patients, axis=1, values=np.array([1, 2]).reshape(2, 1))
+# %%

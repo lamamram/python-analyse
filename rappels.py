@@ -106,3 +106,33 @@ class Truc:
 t = Truc()
 print(t)
 # %%
+# ajout d'un élément à une séquence
+lst = [1, 2]
+lst.append(3)
+lst
+
+# concatenation d'un liste
+lst + [4, 5]
+lst.extend([4, 5])
+lst
+# %%
+
+from datetime import datetime, timedelta
+
+dt = datetime(2022, 7, 18, 16, 18, 33)
+
+dt = datetime.now()
+dt
+
+dt = datetime.strptime("2022-07-18 16:19:22", "%Y-%m-%d %H:%M:%S")
+dt
+
+dt.strftime("%d/%m/%Y")
+
+dur = datetime.now() - dt
+dur
+
+cuisson_oeuf_coque = timedelta(minutes=3)
+datetime.now() + cuisson_oeuf_coque
+
+# %%
