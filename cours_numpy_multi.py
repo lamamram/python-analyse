@@ -73,3 +73,24 @@ patients
 np.append(patients, axis=0, values=[[1, 2, 3, 4]])
 np.append(patients, axis=1, values=np.array([1, 2]).reshape(2, 1))
 # %%
+
+# tableaux / matrices numpy communs
+
+uns = np.ones(shape=(3, 5))
+np.zeros(shape=(3, 5, 2))
+
+3*np.pi *uns + 1/2
+
+3 * np.eye(5, k=-2) + -1 * np.eye(5, k=1) 
+# %%
+
+# range numpy: start, stop, incrément (stop non compris)
+arr = np.arange(0, 3, 0.25)
+arr = 0.25 * np.arange(0, 12)
+arr
+
+# %%
+# start, stop, nb de points (stop compris)
+np.linspace(0,2.75, num=12)
+
+# %%
