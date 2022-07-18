@@ -46,3 +46,17 @@ patients.mean(axis=1).reshape(2, 1)
 np.apply_along_axis(lambda r: r[0]/(r[1]/100)**2, axis=1, arr=patients)
 
 # %%
+other_patients = np.genfromtxt(
+    "patients.txt",
+    encoding="utf8",
+    delimiter=",",
+    skip_header=1,
+    comments="//",
+    missing_values="???",
+    filling_values=0.,
+    usecols=(0,1,3,4),
+    dtype="f8,f8,i4,i4,U3"
+)
+other_patients.ndim
+other_patients["f0"].mean()
+# %%
