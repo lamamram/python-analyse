@@ -79,5 +79,5 @@ np.average(notes, weights=coeffs)
 # %%
 stock = [1000, 1328, 1145, 866, 953]
 # 1. trouver le tableau des coeffs multiplicateurs permettants de passer
-# de stock[n] à stock[n + 1]
-# hint: np.diff
+# de stock[n] à stock[n + 1], arrondi à 2 chiffres sign
+# hint: np.diff, np.around

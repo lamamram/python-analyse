@@ -78,3 +78,18 @@ sorted(rows)
 sorted(rows, key=lambda r: int(r[4:]))
 
 # %%
+
+# chainage de méthodes
+
+class Truc:
+    def transfo1(self):
+        print("trasfo1")
+        return self
+    
+    def transfo2(self):
+        print("trasfo2")
+        return self
+
+t = Truc()
+t.transfo1().transfo2()
+# %%
