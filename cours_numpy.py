@@ -70,3 +70,6 @@ clean_nan = clean_inf[~np.isnan(clean_inf)]
 # isnan inclue None : pas de np.isnull()
 clean_nan.mean()
 # %%
+notes = rng.integers(0, 20, endpoint=True, size=20, dtype=np.int8)
+coeffs = rng.integers(1, 3, endpoint=True, size=20, dtype=np.int8)
+
