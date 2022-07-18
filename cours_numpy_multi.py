@@ -40,3 +40,9 @@ patients.mean(axis=0)
 np.array([patient1.mean(), patient2.mean()])
 patients.mean(axis=1).reshape(2, 1)
 # %%
+# fonction custom sur un axe
+# ex: poids / taille**2
+
+np.apply_along_axis(lambda r: r[0]/(r[1]/100)**2, axis=1, arr=patients)
+
+# %%

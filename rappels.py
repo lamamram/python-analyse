@@ -77,6 +77,12 @@ rows
 sorted(rows)
 sorted(rows, key=lambda r: int(r[4:]))
 
+# copie indépendante en mémoire pour les types list et dict
+rows2 = rows.copy()
+rows.sort()
+print(rows)
+print(rows2)
+del rows2
 # %%
 
 # chainage de méthodes
