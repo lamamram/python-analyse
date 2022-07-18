@@ -36,4 +36,8 @@ print(f"arr1 = {arr1}")
 print(f"arr2 = {arr2}")
 
 # HINT: np.union1d, np.intersect1d, np.isin
+
+union = np.union1d(arr1, arr2)
+inter = np.intersect1d(arr1, arr2)
+union[ ~np.isin(union, inter) ]
 # %%
