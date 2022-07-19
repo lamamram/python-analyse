@@ -56,6 +56,7 @@ df_alt
 df_alt2 = df.copy()
 # version 2: travailler dirctement sur l'objet series
 # grâce à l'attribut str qui propose des versions vectorisées
-# des fonctions usuelle de la classe builtin str
+# des fonctions usuelles de la classe builtin str
 df_alt2["age"].str.extract("^(\d+)$")
 # %%
+df.age

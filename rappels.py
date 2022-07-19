@@ -149,3 +149,27 @@ for k, v in d.items():
     print(k, v)
 # %%
 # %%
+
+class Truc:
+    def __init__(self, param):
+        self.param = param
+    
+    def __setitem__(self, param, value):
+        setattr(self, param, value)
+    
+    def __getitem__(self, param):
+        return getattr(self, param)
+    
+    def func(self):
+        return "hello"
+    
+
+
+t = Truc("value")
+print(t.param)
+print(t["param"])
+t["param"] = "new_val"
+print(t.param)
+
+print(getattr(t, "func")())
+# %%
