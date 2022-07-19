@@ -182,3 +182,11 @@ def func(p1: int, p2: str) -> tuple:
 print(func.__annotations__)
 func("hi", 0)
 # %%
+
+def add_elem(elem, lst):
+    lst.append(elem)
+
+l = [1, 2, 3]
+add_elem(4, l)
+print(l)
+# %%
