@@ -59,4 +59,29 @@ df_alt2 = df.copy()
 # des fonctions usuelles de la classe builtin str
 df_alt2["age"].str.extract("^(\d+)$")
 # %%
+# appel d'une colonne
+df["age"]
 df.age
+# %%
+# appel de plusieurs colonnes
+df[ ["age", "name"] ]
+# slicing sur les noms de colonnes
+df["name":]
+# %%
+# slicing sur les lignes (fin non comprise)
+df[0:2]
+# slicing sur les valeurs d'index (fin compris)
+df["user1":"user3"]
+# %%
+# filtrage de ligne par valeurs de colonnes
+df_alt[ df_alt.age > 40 ]
+# %%
+# sélection lignes / colonnes
+df_alt.loc["user1":"user2", ["name", "size"]]
+df_alt.loc[df_alt.age > 40, ["name", "size"]]
+
+df_alt.iloc[0:2, 0:2]
+
+df_alt.at["user2", "name"]
+df_alt.iat[1,1]
+# %%
