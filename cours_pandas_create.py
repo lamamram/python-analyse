@@ -14,8 +14,8 @@ rng = np.random.default_rng(int(time()))
 
 data = [
     ["jimmy", 28, "2 rue de la rép, 44000 NANTES", 1.73],
-    # ["Joan", 33, "12 bd Haussmann 75009 Paris", 1.56],
-    ["Joan", 33, "12 bd Haussmann 75009 Paris"],
+    ["Joan", 33, "12 bd Haussmann 75009 Paris", 1.56],
+    # ["Joan", 33, "12 bd Haussmann 75009 Paris"],
     ["Paul", 76, "10, chemin des lilas, 13002 MaRSEILLE", 1.85],
 ]
 columns = ["name", "age", "address", "size"]
@@ -65,8 +65,10 @@ df = pd.read_csv(
 df
 # %%
 df.to_json("users.json",
-            # orient="records"
+            orient="records",
+            # gestion des caractères non ascii
+            force_ascii=False
             # orient="index"
-            orient="table"
+            # orient="table"
 )
 # %%
