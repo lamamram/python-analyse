@@ -77,9 +77,18 @@ float_df.median()
 def q33(s: pd.Series):
     return s.quantile(0.33)
 
+# fermeture: fonction qui contrôle le contexte d'exécution d'une autre fonction
+def avg_top_n(n):
+    def func(s: pd.Series):
+        return s.sort_values(ascending=False)[:n].mean()
+    func.__name__ = f"avg_top_{n}"
+    return func
+
 pg_df.agg({
     "bill_length_mm": ["mean", np.std],
-    "body_mass_g": ["min", q33]
+    "body_mass_g": ["min", q33, avg_top_n(5)]
 })
+
+
 
 # %%
