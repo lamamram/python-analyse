@@ -173,3 +173,12 @@ print(t.param)
 
 print(getattr(t, "func")())
 # %%
+# annotations
+# 1. action purement informative (pas de contrôlle de type)
+# 2. permet l'autocomplétion dans l'éditeur
+def func(p1: int, p2: str) -> tuple:
+    return p1, p2
+
+print(func.__annotations__)
+func("hi", 0)
+# %%
