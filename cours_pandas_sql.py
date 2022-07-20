@@ -46,14 +46,51 @@ url = "http://www.afnic.fr/wp-media/ftp/documentsOpenData/202105_OPENDATA_A-Noms
 # 2. écrire le df en local dans un .zip
 # 3. ne faire ceci que si ce n'est pas déjà fait
 with TimerCtx():
+    # 3/0
     if not os.path.exists("dns.zip"):
         dns_df = pd.read_csv(url, sep=";", encoding="iso-8859-1")
+    dns_df.to_csv(
+        "dns.zip",
+        encoding="iso-8859-1",
+        compression={
+            "method": "zip",
+            "archive_name": "dns.csv"
+        },
+        index=False
+    )
 # %%
+# dataframe utile
+dns_df = pd.read_csv(
+    "dns.zip",
+    encoding="iso-8859-1",
+    nrows=1000000,
+    usecols=["Nom de domaine", "Pays BE", "Date de création"]
+)
+# %%
+dns_df.rename(columns={
+    "Nom de domaine": "name",
+    "Pays BE": "iso2",
+    "Date de création": "created_at"
+}, inplace=True)
 dns_df
-
-
 ## insérer les données du df dans la table domain_name
 # 4. mettre en cohérence les noms des colonnes utiles
 # 5. écrire le to_csv sans modifier le schéma de la table
 # 6. écrire le to_csv de façon à créer (ou écraser) le schéma à partir du df
+# %%
+with TimerCtx():
+    dns_df.to_sql(
+        "domain_name",
+        df_conn,
+        # if_exists="append",
+        if_exists="replace",
+        index=False,
+        # en cas de création de la table
+        dtype={
+            "dns_id": Integer,
+            "name": String,
+            "iso2": String,
+            "created_at": Text
+        }
+    )
 # %%
