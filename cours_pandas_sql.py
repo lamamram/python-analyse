@@ -4,6 +4,7 @@ import sqlite3
 import pandas as pd
 from time import time
 import numpy as np
+from time_context import TimerCtx
 
 # pip install SQLAlchemy
 # créer une connexion de bdd
@@ -41,11 +42,18 @@ url = "http://www.afnic.fr/wp-media/ftp/documentsOpenData/202105_OPENDATA_A-Noms
 
 ## télécharger les données
 # 1. se donner un dataframe avec l'url
+# observer le fichier : sep=";" encoding="iso-8859-1"
 # 2. écrire le df en local dans un .zip
 # 3. ne faire ceci que si ce n'est pas déjà fait
+with TimerCtx():
+    if not os.path.exists("dns.zip"):
+        dns_df = pd.read_csv(url, sep=";", encoding="iso-8859-1")
+# %%
+dns_df
 
 
 ## insérer les données du df dans la table domain_name
 # 4. mettre en cohérence les noms des colonnes utiles
 # 5. écrire le to_csv sans modifier le schéma de la table
 # 6. écrire le to_csv de façon à créer (ou écraser) le schéma à partir du df
+# %%
