@@ -190,3 +190,10 @@ l = [1, 2, 3]
 add_elem(4, l)
 print(l)
 # %%
+
+# opérateur de répétition
+
+print(3 * "rien")
+
+print(10 * [1])
+# %%
