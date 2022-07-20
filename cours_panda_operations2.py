@@ -20,3 +20,10 @@ rng = np.random.default_rng(int(time()))
 students = ["student_{i}" for i in range(1, 11)]
 subjects = ["math", "english", "biology", "history"]
 coeffs = [3, 2, 2, 1]
+
+note_df = pd.DataFrame({
+    "student": [],
+    "subject": [],
+    "note": [],
+    "coeff": []  
+})
