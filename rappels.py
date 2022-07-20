@@ -197,3 +197,12 @@ print(3 * "rien")
 
 print(10 * [1])
 # %%
+
+f = open("users.csv", "r", encoding="utf8")
+print(f.read())
+f.close()
+
+# avec gestionnaire de contexte
+with open("users.csv", "r", encoding="utf8") as f:
+    print(f.read())
+# le fichier est automatiquement fermé
