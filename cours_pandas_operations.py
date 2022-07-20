@@ -7,7 +7,7 @@ import numpy as np
 print(pd.__version__)
 print(np.__version__)
 
-# instanciaiton correcte d'un rng
+# instanciation correcte d'un rng
 rng = np.random.default_rng(int(time()))
 # %%
 
@@ -58,4 +58,38 @@ gb = pg_df[["species", "sex", "body_mass_g"]].groupby(["species", "sex"])
 # l'objet gb n'est pas un df
 # print(gb)
 gb.mean()
+# %%
+
+# segementation
+# catégories de poids: 
+# 1. déterminer les valeurs de poids qui découpent
+# l'ensemble des données en 3 intervalles de longueurs égales
+w_min, w_max = pg_df["body_mass_g"].agg(["min", "max"])
+# print(w_min, w_max)
+w_cat = np.linspace(w_min, w_max, 4)
+w_cat
+w_labels = ["light", "medium", "heavy"]
+
+# création de la colonne
+pg_df["weight_categories"] = pd.cut(
+    pg_df["body_mass_g"],
+    bins=w_cat,
+    labels=w_labels,
+    right=False
+)
+pg_df[["body_mass_g", "weight_categories"]]
+
+# nb. de pingoins par catégorie de poids
+nb_pg = pg_df.shape[0]
+gb = pg_df[["weight_categories", "body_mass_g"]].groupby("weight_categories")
+gb["body_mass_g"].apply(lambda s: s.count()/nb_pg * 100)
+# %%
+# répartition statistique
+pg_df["weight_categories"] = pd.qcut(
+    pg_df["body_mass_g"],
+    q=3,
+    # labels=w_labels
+)
+gb = pg_df[["weight_categories", "body_mass_g"]].groupby("weight_categories")
+gb["body_mass_g"].apply(lambda s: s.count()/nb_pg * 100)
 # %%
