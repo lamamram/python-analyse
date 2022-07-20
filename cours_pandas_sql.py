@@ -20,7 +20,7 @@ try:
     with sqlite3.connect("dns.db") as conn:
         # création d'un prompt pout exécuter les requêtes
         cur = conn.cursor()
-        with open("domain_name_sqlite3.sql") as f:
+        with open("domain_name_sqlite3.sql", encoding="utf8") as f:
             script = f.read()
             cur.executescript(script)
 except (sqlite3.OperationalError, sqlite3.DatabaseError) as e:
@@ -28,4 +28,11 @@ except (sqlite3.OperationalError, sqlite3.DatabaseError) as e:
 except ConnectionError as ce:
     print(ce)
 
+# %%
+# création d'une connexion sqlite3 compatible pandas (via sqlAlchemy)
+
+df_conn = create_engine("sqlite:///dns.db")
+pays_df = pd.read_sql("pays", df_conn, index_col="iso2")
+pays_df = pd.read_sql("SELECT * FROM pays WHERE name LIKE 'F%'", df_conn, index_col="iso2")
+pays_df
 # %%
