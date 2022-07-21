@@ -99,6 +99,8 @@ class Truc:
 t = Truc()
 t.transfo1().transfo2()
 # %%
+# la méthode __str__ contrôle le comportement
+# d'un objet soumis à str() et donc print()
 class Truc:
     def __str__(self) -> str:
         return "machin"
@@ -116,7 +118,7 @@ lst + [4, 5]
 lst.extend([4, 5])
 lst
 # %%
-
+# l'essentiel sur datetime
 from datetime import datetime, timedelta
 
 dt = datetime(2022, 7, 18, 16, 18, 33)
