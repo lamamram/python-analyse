@@ -40,7 +40,7 @@ geo_df[["loc", "iso2"]] = geo_df["loc"].str.split("|", expand=True)
 geo_df
 
 # 5. joindre les deux dataframes pour obtenir 5 colonnes avec lat, lon
-pd.merge(
+join_df = pd.merge(
     dns_df, geo_df,
     how="inner",
     left_on=["Pays BE", "Ville BE"],
@@ -51,7 +51,29 @@ pd.merge(
 mp = folium.Map(location=[45.130518, 0.536417], zoom_start=2)
 mp
 # %%
-mk = folium.Marker(location=[0, 0], popup="ICI")
-mk.add_to(mp)
-
+# mk = folium.Marker(location=[0, 0], popup="ICI")
+# mk.add_to(mp)
+# mp
+join_df.apply(
+    lambda r: folium.Marker(
+        location=[r["lat"], r["lon"]],
+        popup=f"{r['Ville BE']}, {r['Pays BE']} : {r['nb']}"
+    ).add_to(mp),
+    axis=1
+)
 mp
+# %%
+mp = folium.Map(location=[45.130518, 0.536417], zoom_start=2)
+HeatMap(join_df[["lat", "lon"]], ).add_to(mp)
+mp
+# %%
+mp = folium.Map(location=[45.130518, 0.536417], zoom_start=2)
+MarkerCluster(
+    locations=join_df[["lat", "lon"]].to_numpy(),
+    popups=join_df["Ville BE"].tolist(),
+    # icon_create_function="""
+    # function(){}
+    # """
+).add_to(mp)
+mp
+# %%
