@@ -206,3 +206,17 @@ f.close()
 with open("users.csv", "r", encoding="utf8") as f:
     print(f.read())
 # le fichier est automatiquement fermé
+
+
+# %%
+
+def func(*a, **kwd):
+    return a, kwd
+
+func("a", "b", "c", d="d", e="e")
+
+args = ["a", "b", "c"]
+kwargs = {'d': 'd', 'e': 'e'}
+
+func(*args, **kwargs)
+# %%
