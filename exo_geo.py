@@ -38,6 +38,11 @@ geo_df[["loc", "iso2"]] = geo_df["loc"].str.split("|", expand=True)
 geo_df
 
 # 5. joindre les deux dataframes pour obtenir 5 colonnes avec lat, lon
+pd.merge(
+    dns_df, geo_df,
+    how="inner",
+    left_on=["Pays BE", "Ville BE"],
+    right_on=["iso2", "loc"]).drop(columns=["iso2", "loc"])
 
 # 6. afficher les marqueurs sur une carte folium
 # %%
