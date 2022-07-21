@@ -4,6 +4,8 @@ import pandas as pd
 import numpy as np
 from time_context import TimerCtx
 from utils import load_dns
+import folium
+from folium.plugins import HeatMap, MarkerCluster
 # %%
 # 1. écrire une fonction qui ouvre le fichier dns.zip avec certaines colonnes
 
@@ -46,3 +48,10 @@ pd.merge(
 
 # 6. afficher les marqueurs sur une carte folium
 # %%
+mp = folium.Map(location=[45.130518, 0.536417], zoom_start=2)
+mp
+# %%
+mk = folium.Marker(location=[0, 0], popup="ICI")
+mk.add_to(mp)
+
+mp
