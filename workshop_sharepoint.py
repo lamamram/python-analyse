@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 sharepoint_conn = {
-    "URL": os.environ["SHAREPOINT_URL"],
+    "HOST": os.environ["SHAREPOINT_HOST"],
+    "PATH": os.environ["SHAREPOINT_PATH"],
     "USER": os.environ["SHAREPOINT_USER"],
     "PWD": os.environ["SHAREPOINT_PWD"],
 }
@@ -14,11 +15,16 @@ sharepoint_conn = {
 sharepoint_conn
 # {k: v for k, v in os.environ.items()}
 # %%
+from office365.runtime.auth.authentication_context import AuthenticationContext
 from office365.sharepoint.client_context import ClientContext
+from office365.sharepoint.files.file import File
 
-ctx = ClientContext(sharepoint_conn["URL"])
-ctx.with_user_credentials(sharepoint_conn["USER"], sharepoint_conn["PWD"])
-web = ctx.web.get().execute_query()
+ctx_auth = AuthenticationContext(sharepoint_conn["HOST"])
+ctx_auth.acquire_token_for_user(sharepoint_conn["USER"], sharepoint_conn["PWD"])
+ctx = ClientContext(sharepoint_conn["HOST"], ctx_auth)
+ctx.load(ctx.web)
+ctx.execute_query()
+response = File.open_binary(ctx, sharepoint_conn["PATH"])
 
 
 #save data to BytesIO stream
