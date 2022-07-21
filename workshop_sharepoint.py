@@ -1,6 +1,12 @@
 # %%
 import os
+import io
+import pandas as pd
 from dotenv import load_dotenv
+from office365.runtime.auth.authentication_context import AuthenticationContext
+from office365.sharepoint.client_context import ClientContext
+from office365.sharepoint.files.file import File
+
 
 load_dotenv()
 
@@ -15,9 +21,6 @@ sharepoint_conn = {
 sharepoint_conn
 # {k: v for k, v in os.environ.items()}
 # %%
-from office365.runtime.auth.authentication_context import AuthenticationContext
-from office365.sharepoint.client_context import ClientContext
-from office365.sharepoint.files.file import File
 
 ctx_auth = AuthenticationContext(sharepoint_conn["HOST"])
 ctx_auth.acquire_token_for_user(sharepoint_conn["USER"], sharepoint_conn["PWD"])
@@ -28,6 +31,8 @@ response = File.open_binary(ctx, sharepoint_conn["PATH"])
 
 
 #save data to BytesIO stream
-# bytes_file_obj = io.BytesIO()
-# bytes_file_obj.write(response.content)
-# bytes_file_obj.seek(0)
+bytes_file_obj = io.BytesIO()
+bytes_file_obj.write(response.content)
+bytes_file_obj.seek(0)
+
+df = pd.read_excel(bytes_file_obj)
