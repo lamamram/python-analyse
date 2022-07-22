@@ -12,7 +12,8 @@ import os
 load_dotenv()
 TOKEN=os.environ["TOKEN"]
 
-# décorateur
+# décorateur: retourne une fonction qui ajoute in comportement
+# à une fonction en paramètre
 def delayed(f):
     def wrapper(*a, **kwd):
         delay = a[2] if len(a) > 2 else 0
@@ -83,7 +84,7 @@ class GoRestApi:
         with TPE(max_workers=nb_workers) as pool:
             ## map synchrone
             # args = [ i for i in range(start, stop+1, step)]
-            args = [ (i, (i - 1)*0.1) for i in range(start, stop + 1, step) ]
+            args = [ (i, (i - 1)*0.05) for i in range(start, stop + 1, step) ]
             results = pool.map(lambda a: self.get_user_page(*a), args)
             responses = list(map(lambda r: r["response"] if r["valid"] else [], results))
             return reduce(lambda x, y : x + y, responses)
