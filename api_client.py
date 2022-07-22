@@ -4,6 +4,16 @@ from time_context import TimerCtx
 from concurrent.futures import ThreadPoolExecutor as TPE
 from multiprocessing import cpu_count
 from functools import reduce
+from time import sleep
+from random import randint
+
+
+# décorateur
+def delayed(f):
+    def wrapper(*a, **kwd):
+        sleep(0.1*randint(1, 10))
+        return f(*a, **kwd)
+    return wrapper
 
 class GoRestApi:
     __URL = "https://gorest.co.in/public"
@@ -39,6 +49,8 @@ class GoRestApi:
             response["response"] = e
         return response
 
+    # équivalent à get_user_page = delayed(get_user_page)
+    @delayed
     def get_user_page(self, page_id):
         return self.__call("GET", f"users?page={page_id}")
 
@@ -48,7 +60,7 @@ class GoRestApi:
         stop = args[0] if len(args) == 1 else args[1]
         step = args[2] if len(args) > 2 else 1
         for i in range(start, stop + 1, step):
-            obj = self.get_user_page(i)
+            obj = self.get_user_page(0, i)
             if obj["valid"]:
                 data += obj["response"]
             print(f"page {i} fetched")
@@ -62,7 +74,8 @@ class GoRestApi:
         step = args[2] if len(args) > 2 else 1
         with TPE(max_workers=nb_workers) as pool:
             # le map est synchrone
-            results = pool.map(self.get_user_page, list(range(start, stop + 1, step)))
+            args = [ i for i in range(start, stop+1, step)]
+            results = pool.map(self.get_user_page, args)
             responses = list(map(lambda r: r["response"] if r["valid"] else [], results))
             return reduce(lambda x, y : x + y, responses)
         # for i in range(start, stop + 1, step):
