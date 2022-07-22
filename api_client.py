@@ -1,5 +1,4 @@
 # %%
-from asyncio import as_completed
 import requests
 from time_context import TimerCtx
 from concurrent.futures import ThreadPoolExecutor as TPE, as_completed
@@ -16,7 +15,8 @@ TOKEN=os.environ["TOKEN"]
 # décorateur
 def delayed(f):
     def wrapper(*a, **kwd):
-        sleep(0.1*randint(1, 10))
+        delay = a[2] if len(a) > 2 else 0
+        sleep(delay)
         return f(*a, **kwd)
     return wrapper
 
@@ -59,7 +59,7 @@ class GoRestApi:
 
     # équivalent à get_user_page = delayed(get_user_page)
     @delayed
-    def get_user_page(self, page_id):
+    def get_user_page(self, page_id, *a):
         return self.__call("GET", f"users?page={page_id}")
 
     def get_user_pages(self, *args):
@@ -68,7 +68,7 @@ class GoRestApi:
         stop = args[0] if len(args) == 1 else args[1]
         step = args[2] if len(args) > 2 else 1
         for i in range(start, stop + 1, step):
-            obj = self.get_user_page(0, i)
+            obj = self.get_user_page(i)
             if obj["valid"]:
                 data += obj["response"]
             print(f"page {i} fetched")
@@ -83,14 +83,15 @@ class GoRestApi:
         with TPE(max_workers=nb_workers) as pool:
             ## map synchrone
             # args = [ i for i in range(start, stop+1, step)]
-            # results = pool.map(self.get_user_page, args)
-            # responses = list(map(lambda r: r["response"] if r["valid"] else [], results))
-            # return reduce(lambda x, y : x + y, responses)
+            args = [ (i, (i - 1)*0.1) for i in range(start, stop + 1, step) ]
+            results = pool.map(lambda a: self.get_user_page(*a), args)
+            responses = list(map(lambda r: r["response"] if r["valid"] else [], results))
+            return reduce(lambda x, y : x + y, responses)
 
             ## liste d'objets asynchrones dépilés dans l'ordre d'arrivée
-            futs = [pool.submit(self.get_user_page, i) for i in range(start, stop+1, step)]
-            for f in as_completed(futs):
-                data.append(f.result())
+            # futs = [pool.submit(self.get_user_page, i) for i in range(start, stop+1, step)]
+            # for f in as_completed(futs):
+            #     data.append(f.result())
         # for i in range(start, stop + 1, step):
         #     obj = self.get_user_page(i)
         #     if obj["valid"]:
@@ -109,7 +110,7 @@ if __name__ == "__main__":
     api = GoRestApi()
     with TimerCtx():
         # print(len(api.get_user_pages(10)))
-        print(len(api.get_user_pages_async(100)))
+        print(len(api.get_user_pages_async(10)))
         # user = {
         #     "name": "mlamam",
         #     "email": "admin@example.com",
