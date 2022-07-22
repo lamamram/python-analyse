@@ -1,7 +1,8 @@
 # %%
+from asyncio import as_completed
 import requests
 from time_context import TimerCtx
-from concurrent.futures import ThreadPoolExecutor as TPE
+from concurrent.futures import ThreadPoolExecutor as TPE, as_completed
 from multiprocessing import cpu_count
 from functools import reduce
 from time import sleep
@@ -81,10 +82,16 @@ class GoRestApi:
         step = args[2] if len(args) > 2 else 1
         with TPE(max_workers=nb_workers) as pool:
             # le map est synchrone
-            args = [ i for i in range(start, stop+1, step)]
-            results = pool.map(self.get_user_page, args)
-            responses = list(map(lambda r: r["response"] if r["valid"] else [], results))
-            return reduce(lambda x, y : x + y, responses)
+            ## map synchrone
+            # args = [ i for i in range(start, stop+1, step)]
+            # results = pool.map(self.get_user_page, args)
+            # responses = list(map(lambda r: r["response"] if r["valid"] else [], results))
+            # return reduce(lambda x, y : x + y, responses)
+
+            ## liste d'objets asynchrones dépilés dans l'ordre d'arrivée
+            futs = [pool.submit(self.get_user_page, i) for i in range(start, stop+1, step)]
+            for f in as_completed(futs):
+                data.append(f.result())
         # for i in range(start, stop + 1, step):
         #     obj = self.get_user_page(i)
         #     if obj["valid"]:
@@ -103,12 +110,12 @@ if __name__ == "__main__":
     api = GoRestApi()
     with TimerCtx():
         # print(len(api.get_user_pages(10)))
-        # print(len(api.get_user_pages_async(100)))
-        user = {
-            "name": "mlamam",
-            "email": "admin@example.com",
-            "gender": "male",
-            "status": "active"
-        }
-        print(api.create_user(user))
+        print(len(api.get_user_pages_async(100)))
+        # user = {
+        #     "name": "mlamam",
+        #     "email": "admin@example.com",
+        #     "gender": "male",
+        #     "status": "active"
+        # }
+        # print(api.create_user(user))
 # %%
