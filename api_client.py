@@ -1,9 +1,13 @@
 # %%
 import requests
 from time_context import TimerCtx
+from concurrent.futures import ThreadPoolExecutor as TPE
+from multiprocessing import cpu_count
+from functools import reduce
 
 class GoRestApi:
     __URL = "https://gorest.co.in/public"
+    __NB_WORKERS = cpu_count()
 
     def __init__(self, version="v2") -> None:
         self.__version = version
@@ -49,6 +53,24 @@ class GoRestApi:
                 data += obj["response"]
             print(f"page {i} fetched")
         return data
+    
+    def get_user_pages_async(self, *args, nb_workers=None):
+        if not nb_workers: nb_workers = self.__NB_WORKERS
+        data = []
+        start = args[0] if len(args) > 1 else 1
+        stop = args[0] if len(args) == 1 else args[1]
+        step = args[2] if len(args) > 2 else 1
+        with TPE(max_workers=nb_workers) as pool:
+            # le map est synchrone
+            results = pool.map(self.get_user_page, list(range(start, stop + 1, step)))
+            responses = list(map(lambda r: r["response"] if r["valid"] else [], results))
+            return reduce(lambda x, y : x + y, responses)
+        # for i in range(start, stop + 1, step):
+        #     obj = self.get_user_page(i)
+        #     if obj["valid"]:
+        #         data += obj["response"]
+        #     print(f"page {i} fetched")
+        return data
 
     def get_version(self):
         return self.__version
@@ -57,5 +79,6 @@ class GoRestApi:
 if __name__ == "__main__":
     api = GoRestApi()
     with TimerCtx():
-        print(len(api.get_user_pages(10)))
+        # print(len(api.get_user_pages(10)))
+        print(len(api.get_user_pages_async(100)))
 # %%
