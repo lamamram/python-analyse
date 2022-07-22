@@ -64,12 +64,24 @@ temps_df.rename(columns={
     "level_1": "city",
     0: "temp"
 }, inplace=True)
-temps_df
-# %%
-temps_df.pivot(
+
+temps_df = temps_df.pivot(
     index="index",
     columns="city",
     values="temp"
-).plot()
+)
 
+ax = temps_df.plot(xticks=temps_df.index)
+
+ax.set_ylabel("Températures (°C)")
+ax.set_xlabel("")
+ax.title.set_text("Temps. 2022")
+
+plt.savefig("temps.png")
+plt.show()
+# plt.xticks(
+#     ticks=temps_df.index,
+#     rotation=30,
+#     fontsize=8
+# )
 # %%
