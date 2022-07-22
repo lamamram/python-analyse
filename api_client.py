@@ -1,5 +1,6 @@
 # %%
 import requests
+from time_context import TimerCtx
 
 class GoRestApi:
     __URL = "https://gorest.co.in/public"
@@ -27,7 +28,7 @@ class GoRestApi:
                 # réponse octets => images et autres téléchargements
                 else:
                     response["response"] = r.content
-            else: raise ValueError(f"wrong status {r.status_code}: {r.text}")
+            else: raise ValueError(f"wrong status {r.status_code}")
         except (requests.ConnectionError, requests.HTTPError, ValueError) as e:
             # raise type(e)
             response["valid"] = False
@@ -37,11 +38,24 @@ class GoRestApi:
     def get_user_page(self, page_id):
         return self.__call("GET", f"users?page={page_id}")
 
+    def get_user_pages(self, *args):
+        data = []
+        start = args[0] if len(args) > 1 else 1
+        stop = args[0] if len(args) == 1 else args[1]
+        step = args[2] if len(args) > 2 else 1
+        for i in range(start, stop + 1, step):
+            obj = self.get_user_page(i)
+            if obj["valid"]:
+                data += obj["response"]
+            print(f"page {i} fetched")
+        return data
+
     def get_version(self):
         return self.__version
 
 
 if __name__ == "__main__":
     api = GoRestApi()
-    print(api.get_user_page(1))
+    with TimerCtx():
+        print(len(api.get_user_pages(10)))
 # %%
