@@ -6,7 +6,11 @@ from multiprocessing import cpu_count
 from functools import reduce
 from time import sleep
 from random import randint
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+TOKEN=os.environ["TOKEN"]
 
 # décorateur
 def delayed(f):
@@ -19,11 +23,14 @@ class GoRestApi:
     __URL = "https://gorest.co.in/public"
     __NB_WORKERS = cpu_count()
 
-    def __init__(self, version="v2") -> None:
+    def __init__(self, token=TOKEN, version="v2") -> None:
         self.__version = version
+        self.__token = token
 
     def __call(self, method, endpoint, data={}, headers={}, files={}):
         response = {"valid": True, "response": None}
+        if method.upper() in ("POST", "PUT", "PATCH", "DELETE"):
+            headers["Authorization"] = f"Bearer {self.__token}"
         try:
             location = f"{self.__URL}/{self.__version}/{endpoint}"
             call_fn = getattr(requests, method.lower())
@@ -87,11 +94,21 @@ class GoRestApi:
 
     def get_version(self):
         return self.__version
+    
+    def create_user(self, user):
+        return self.__call("POST", "users", data=user)
 
 
 if __name__ == "__main__":
     api = GoRestApi()
     with TimerCtx():
         # print(len(api.get_user_pages(10)))
-        print(len(api.get_user_pages_async(100)))
+        # print(len(api.get_user_pages_async(100)))
+        user = {
+            "name": "mlamam",
+            "email": "admin@example.com",
+            "gender": "male",
+            "status": "active"
+        }
+        print(api.create_user(user))
 # %%
