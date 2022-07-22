@@ -81,7 +81,6 @@ class GoRestApi:
         stop = args[0] if len(args) == 1 else args[1]
         step = args[2] if len(args) > 2 else 1
         with TPE(max_workers=nb_workers) as pool:
-            # le map est synchrone
             ## map synchrone
             # args = [ i for i in range(start, stop+1, step)]
             # results = pool.map(self.get_user_page, args)
