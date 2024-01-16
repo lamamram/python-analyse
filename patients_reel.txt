@@ -1,0 +1,5 @@
+poids,taille,sys,dia,group
+// données patients
+64.4,173.8,130,80,é+
+52.4,163.8,146,90,O-
+???,184.2,125,79,AB
