@@ -1,5 +1,8 @@
 # %%
 import requests
+from time import time
+from multiprocessing import cpu_count
+from concurrent.futures import ThreadPoolExecutor as TPE, as_completed
 
 URL = "https://gorest.co.in/public"
 
@@ -42,13 +45,37 @@ class GorestClient:
 
     def get_users_pages(self, page_start, page_end):
         ret = {"data": [], "errors": []}
-        for i in range(page_start, page_end):
-            ret["data"].append(self.get_user(i))
-            
+        # SYNCHRONE
+        # for i in range(page_start, page_end):
+        #     ret["data"].append(self.get_user(i))
+        # return ret
+        # initialise le pool avec ici la moitié des cpus
+        with TPE(cpu_count()//2) as pool:
+            ## SUBMIT un appel particulier de la pool qui retourne un objet Future
+            # futs = [
+            #     pool.submit(self.get_user, p) for p in range(page_start, page_end + 1)
+            # ]
+            # as_completed attends que les résultats sont arrivés
+            # for f in as_completed(futs):
+            #     # f.result() rend les données où rien si les donnée ne sont pas encore reçu
+            #     ret["data"].append(f.result())
+
+            ## MAP: lance des appels sur le même worker mais avec des paramètrages différents
+            # on peut donner autants de paramètres 
+            # car la pool les appels supplémentaires sont mis en file d'attente
+            # la map retourne un iterateur synchrone 
+            ret["data"] += pool.map(
+                self.get_user,
+                # [(),(),()] si le worker a besoin de plusieurs workers
+                list(range(page_start, page_end + 1))
+            )
+        return ret
+
 
 if __name__ == "__main__":
     api = GorestClient()
-    print("100 pages synchrones:")
-    print(api.get_users_pages(1, 100))
-
+    print("20 pages asynchrones:")
+    start = time()
+    print(api.get_users_pages(1, 20))
+    print(round(time() - start, 3))
 # %%
