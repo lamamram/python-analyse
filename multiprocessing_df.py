@@ -72,7 +72,7 @@ def max_geodesic(df: pd.DataFrame):
 # %%
 @timer
 def process():
-    depts = ["23", "13"] #, "33", "44", "15" "29" "78", "81", "50"]
+    depts = ["23", "13", "33", "44", "15" "29" "78", "81", "50"]
     villes_df.set_index("city", inplace=True)
     with Pool(cpu_count() - 2) as pool:
         ## pool apply => application d'un worker sur un cpu de la pool de manière synchrone
@@ -90,6 +90,7 @@ def process():
             max_geodesic,
             params            
         )
+        # maximum global
         results = dict(zip(depts, results))
         print(results)
         results = sorted(results.items(), key=lambda r: r[1][1], reverse=True)
